@@ -2,10 +2,12 @@
 function [cost] = walk(k)                     
 global xinit duration Cstructure matrixeffort matrixwalktime matrixcost pfsign pfmag perturb W
 
-    if pfsign > 0
+    if pfsign == 1
         perturb.Force = pfmag.*rand(size(perturb.t));
-    else
+    elseif pfsign == 0
         perturb.Force = pfmag*perturb.t.*randn(size(perturb.t));
+    else 
+        perturb.Force = pfmag*randn(size(perturb.t));
     end
 
     if (Cstructure == 0)

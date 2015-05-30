@@ -4,7 +4,7 @@ function walksim_animation(filename)
 % It is based on the code from the walksim_be_pd_M version of the program 
 % which uses a pd controller to set the gains for each joint
 
-	global control perturb budget tsamples an pl plforce plgrf pleff pltorque xinit 
+	global control perturb budget tsamples an pl plforce plgrf pfmag pleff pltorque xinit pfsign
 	
     [t,x] = ode15s(@odefun, tsamples, xinit);
    
@@ -12,10 +12,12 @@ function walksim_animation(filename)
     u = controller(t,x(:,1:18)')';
     budgetplot = budget.*ones(size(tsamples));
     
-    if pfsign > 0
+    if pfsign == 1
         perturb.Force = pfmag.*rand(size(perturb.t));
-    else
+    elseif pfsign == 0
         perturb.Force = pfmag*perturb.t.*randn(size(perturb.t));
+    else 
+        perturb.Force = pfmag*randn(size(perturb.t));
     end
     
     % Animation

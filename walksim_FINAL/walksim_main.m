@@ -10,7 +10,7 @@ global phi1max phi2max phi3max alpha Cstructure T gridsize
 global matrixwalktime matrixeffort matrixcost
 
 % Choose what functions to run
-ani = 1;        % To run walksim_animation, set to 1
+ani = 0;        % To run walksim_animation, set to 1
                 % When ani = 1, the program will ignore commands for
                 % Smethod and Cstructure
 Smethod = 0;    % Search method
@@ -36,7 +36,10 @@ budget = 5000;  % upper limit of allowed effort
 
 % Perturbation Force
 pfmag = 1;      % How fast the perturbation force grows (N/s)
-pfsign = 0;     % Sign of perturbation function.Set = 1 for positive only, set = 0 for pos and negative
+pfsign = 2;     % Sign of perturbation function.
+                % Set = 0 for pos and negative
+                % Set = 1 for positive only, 
+                % Set = 2 for positive and negative constant variance
 %rng(0);        % reset the random number generator
 duration = 100; % maximum perturbation time
 perturb.t = 0:tsp:duration;
@@ -105,30 +108,30 @@ control.x0 = [control.x0 ; control.x0(1,:)]; % add data for the last missing dat
 control.tsamples = (0:2*N)*control.durcycle/(2*N);
 
 % Grid Specific Variables----------------------------------------------
-gridsize = [5 5];                              % number of grid divisions
+gridsize = [50 50];                              % number of grid divisions
 
 % PSO Specific Variables-----------------------------------------------
 phi1max = 2.1304;                           % cognitive constant
 phi2max = 1.0575;                           % social constant for neighborhood interaction
 phi3max = 2;                                % social constant for global interaction
 alpha = 0.9;                                % constriction coefficient scale factor      
-OPTIONS.Maxgen = 100;                         % generation limit
-OPTIONS.popsize =100;                        % population size
-OPTIONS.neighbors = 50;                      % size of particle swarm neighborhood
+OPTIONS.Maxgen = 100;                       % generation limit
+OPTIONS.popsize =100;                       % population size
+OPTIONS.neighbors = 50;                     % size of particle swarm neighborhood
 OPTIONS.numVar = 6;                         % number of dimensions in cost function
 
 if GainStruc == 2
     OPTIONS.MinDomain = [0 0];                        % minimum search domain [p d]
     OPTIONS.MaxDomain = [2000 200];                   % maximum search domain [p d]
-    matrixwalktime = zeros(3);
-    matrixcost   = zeros(3);
-    matrixeffort = zeros(3);
+    matrixwalktime    = zeros(3);
+    matrixcost        = zeros(3);
+    matrixeffort      = zeros(3);
 elseif GainStruc == 6
     OPTIONS.MinDomain = [0 0 0 0 0 0];                % minimum search domain [p d]
     OPTIONS.MaxDomain = [2000 200 2000 200 2000 200]; % maximum search domain [p d]
-    matrixwalktime = zeros(7);
-    matrixcost   = zeros(7);
-    matrixeffort = zeros(7);
+    matrixwalktime    = zeros(7);
+    matrixcost        = zeros(7);
+    matrixeffort      = zeros(7);
 end
 
 % Secondary Functions
